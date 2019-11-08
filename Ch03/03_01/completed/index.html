@@ -13,13 +13,91 @@
 	</style>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.29/browser.js"></script>
 	<script type="text/babel">
+
 		for(let i= 0; i<45; i++){
 			var div = document.createElement('div');
 			div.onclick = function() {
 				alert("you clicked on a box #" + i);
 			};
 			document.getElementsByTagName('section')[0].appendChild(div);
-		}
+
+			//Spread operator
+			console.log('Spread output');
+			var cats = ["Tabby", "Siamese", "Persian"];
+			var dogs = ["Golden Retriever", "Pug", "Schnauzer"];
+
+			var animals = ["Whale", "Giraffe", ...cats, "Snake", ...dogs, "Coyote"];
+
+			console.log(animals);
+
+			//Maps
+			console.log('Map output');
+			var course = new Map();
+			course.set('react', {description: 'ui'});
+			course.set('jest', {description: 'testing'});
+
+			console.log(course);
+			console.log(course.react);
+			console.log(course.get('react'));
+
+			var details = new Map([
+				[new Date(), 'today'],
+				['items', [1, 2]]
+			]);
+
+			console.log(details.size);
+
+			details.forEach(function(item) {
+				console.log(item);
+			}
+
+			//Sets
+			console.log('Set output');
+			var books = new Set();
+			books.add('Pride and Prejudice');
+			books.add('War and Peace')
+						.add('Oliver Twist');
+
+			console.log(books);
+			console.log('how many books?', books.size);
+			console.log('has Oliver Twist?', books.has('Oliver Twist'));
+			books.delete('Oliver Twist');
+			console.log('has Oliver Twist still?', books.has('Oliver Twist'));
+
+			var data = [4,2,4,4,2,5,1,6,7,5,6,8,2,7];
+			var set = new Set(data);
+			console.log('data.length', data.length);
+			console.log('set.size', set.size);
+
+			//For..of
+			console.log('For-of output');
+			for (let letter of 'JavaScript') {
+			console.log(letter);
+			}
+
+			var topics = ['JavaScript', 'Node', 'React'];
+
+			for (let topic of topics) {
+				console.log(topic);
+			}
+
+			var topics = new Map();
+			topics.set('HTML', '/class/html');
+			topics.set('CSS', '/class/css');
+			topics.set('JavaScript', '/class/javascript');
+			topics.set('Node', '/class/node');
+
+			for (let topic of topics.keys()) {
+				console.log(topic, "is the course name");
+			}
+
+			for (let topic of topics.values()) {
+				console.log("The course description can be found at", topic);
+			}
+
+			for (let course of topics.entries()) {
+				console.log(course);
+			}
 
 	</script>
 	<title>Let Keyword</title>
