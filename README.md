@@ -18,7 +18,7 @@ With block-scope, variable declarations are akin to traditional programming lang
 
     const letter = 'a';
     letter = 'b'; //this is not allowed
-  `
+  ```
 
 ### Template Literals
 ``${}``, Need I more say? Use them, they're bomb.
@@ -32,5 +32,15 @@ The spread operator `...` is used to expand an _iterable_  (array or a string ex
 
   let housesAndCars = {cars, houses}; //is going to be an array with two arrays within
   housesAndCars = {...cars, ...houses};  //is going to be a single array of size 4 with individual elements of cars and houses.
-`
+```
+
+### Default function parameters
+
+When defining a function, e.g `function calcFun(funWeight, time)`, if the function is called in a console log it will return a value of NaN. In ES6, however, you can assign function parameters _default_ values that'll be used if no paramaters are sent through. Think of it like having a placeholder in a textbox that a user hasn't filled in yet.
+
+```javascript
+  function calcFun(funWeight=1.1, timeMin=120) {
+    return `${funWeight*timeMin} fun has been had!`;
+  }
+```
 
