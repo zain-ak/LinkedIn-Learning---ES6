@@ -2,8 +2,8 @@
 
 ### Transpiling
 The process of converting ES6 into ES5 so that it can be read by browsers. Common tools for doing transpiling:
-  -  <a href="babeljs.io" target="_blank">Babel.js</a>
-  -  <a href="babeljs.io" target="_blank">Traceur.js</a>
+  -  <a href="http://babeljs.io" target="_blank">Babel.js</a>
+  -  Traceur.js
 
 ### Webpack
 Webpack is a modular build tool for loaders and plugins; _Loaders_ transform the source code of a module e.g Babel. _Plugins_ usually have more complete functionality than loaders, and form the core of Webpack e.g is minifying files.
@@ -42,5 +42,29 @@ When defining a function, e.g `function calcFun(funWeight, time)`, if the functi
   function calcFun(funWeight=1.1, timeMin=120) {
     return `${funWeight*timeMin} fun has been had!`;
   }
+```
+
+### Destructuring Assignments
+Destructuring allows you to break down an object or an array into their smaller elements and access those values directly. Below is a neat way to access an objects properties without explicity calling the object in the function vacationMarketing using the `({})` syntax.
+
+```javascript
+  var vacation = {
+			destination: "Chile",
+			travelers: 2,
+			activity: "skiing", 
+			cost: 4000
+		};
+
+  function vacationMarketing({destination, activity}) {
+    return `Come to ${destination} and do some ${activity}`
+  }
+
+  console.log(vacationMarketing(vacation));
+```
+
+With arrays, you can assign specific variable names to indexes you know you'll use later and just call them like normal variables:
+
+```javascript
+  var [first,,,, last] = ['first', 'second', 'third', 'fourth', 'fifth']; //the commas will skip over the variables in between
 ```
 
