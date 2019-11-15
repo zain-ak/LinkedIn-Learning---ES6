@@ -24,7 +24,7 @@ With block-scope, variable declarations are akin to traditional programming lang
 ``${}``, Need I more say? Use them, they're bomb.
 
 ### Spread Operator
-The spread operator `...` is used to expand an _iterable_  (array or a string expression) in places where zero or more arguments or elements are required. A simple e.g:
+The spread operator `...` is used to expand an _iterable_ (array or a string expression) in places where zero or more arguments or elements are required. A simple e.g:
 
 ```javascript
   const cars {'bmw', 'lexus'};
@@ -125,12 +125,54 @@ Knowing how to consume promises is key, mose of the time you'll be handling `Pro
 `.then()` can be invoked with zero, one or both handlers. This allows for flexibility but can make debugging tricky because it'll ALWAYS return a promise.
 
 ```javascript
+  //making two handlers then attaching them to a function that returns a promise
   const handleSuccess = (success) => {
-  console.log(success);
-};
+    console.log(success);
+  };
 
-const handleFailure = failure => console.log(failure);
+  const handleFailure = failure => console.log(failure);
 
-checkInventory(order).then(handleSuccess, handleFailure);
+  checkInventory(order).then(handleSuccess, handleFailure);
 ```
 
+It's convention to chain on two `thens` one after the other to handle a success and a failure, for readability:
+
+```javascript
+  prom
+  .then((resolvedValue) => {
+    console.log(resolvedValue);
+  })
+  .then(null, (rejectionReason) => {
+    console.log(rejectionReason);
+  });
+```
+
+But this goes another step further by using `.catch()` to handle the failure:
+
+```javascript
+  prom
+  .then((resolvedValue) => {
+    console.log(resolvedValue);
+  })
+  .catch((rejectionReason) => {
+    console.log(rejectionReason);
+  });
+```
+
+##### Chaining Promises
+
+It's common to chain the results of promises one after the other since they use them. The process of chaining promises together is called _composition_. 
+
+```javascript
+  firstPromiseFunction()
+  .then((firstResolveVal) => {
+    return secondPromiseFunction(firstResolveVal);
+  })
+  .then((secondResolveVal) => {
+    console.log(secondResolveVal);
+  });
+```
+
+*NOTE* Be careful, make sure you chain promises and don't nest them. Make sure to `return` promises in chains.
+
+##### Promises.all()
