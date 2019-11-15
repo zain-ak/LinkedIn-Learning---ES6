@@ -68,3 +68,69 @@ With arrays, you can assign specific variable names to indexes you know you'll u
   var [first,,,, last] = ['first', 'second', 'third', 'fourth', 'fifth']; //the commas will skip over the variables in between
 ```
 
+### Asynchronity
+
+Asynchronous JavaScript uses the _event-loop_. The delayed code will be added to a piece of code waiting to be run. The code waiting to be run will be executed first, then the delayed code will be executed. 
+
+#### Promises
+
+Promises are objects that represent the eventual outcome of an asynchronous operation. A Promise object can be in one of three states:
+
+- *Pending*: The initial state — the operation has not completed yet.
+- _Fulfilled_: The operation has completed successfully and the promise now has a resolved value. For example, a request’s promise might resolve with a JSON object as its value.
+- _Rejected_: The operation has failed and the promise has a reason for the failure. This reason is usually an Error of some kind.
+
+A promise has been _settled_ if it has been either resolved (fulfilled) or rejected.
+
+##### Constructing Promises
+```javascript
+  const inventory = {
+  sunglasses: 1900,
+  pants: 1088,
+  bags: 1344
+};
+
+// Write your code below:
+const myExecutor = (resolve, reject) => {
+  if (inventory.sunglasses > 0) {
+    resolve(`Sunglasses order processed.`);
+  }
+  else
+    reject(`That item is sold out.`);
+};
+
+/*A promise is created using a Promise constructor, which takes in a executor function
+  as a parameter. The executor function contains the resolve and reject methods in it. 
+
+  The executor, myExecutor, has been created above and is passed in the Promise 
+  constructor below.
+*/
+const orderSunglasses = () => new Promise(myExecutor); 
+
+
+const orderPromise = orderSunglasses(); //Create a promise
+
+console.log(orderPromise); //Print the result of the promise
+
+```
+
+##### Consuming Promises
+
+Knowing how to consume promises is key, mose of the time you'll be handling `Promise` objects as a result of asynchronous calls you've made. The initial state of all promises is `pending`, but we know it'll settle. What do we want to happen `then`? Well, you chain on the method `.then()`. 
+
+`.then()` is a higher-order function; it takes two callback functions as arguments, called _handlers_:
+  1. `onFulfilled` is the _sucesss_ handler and handles the logic when the promise resolves
+  2. `onRejeccted` is the _failure_ handler and handles the logic when the promise is rejected.
+
+`.then()` can be invoked with zero, one or both handlers. This allows for flexibility but can make debugging tricky because it'll ALWAYS return a promise.
+
+```javascript
+  const handleSuccess = (success) => {
+  console.log(success);
+};
+
+const handleFailure = failure => console.log(failure);
+
+checkInventory(order).then(handleSuccess, handleFailure);
+```
+
