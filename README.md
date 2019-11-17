@@ -176,3 +176,24 @@ It's common to chain the results of promises one after the other since they use 
 *NOTE* Be careful, make sure you chain promises and don't nest them. Make sure to `return` promises in chains.
 
 ##### Promises.all()
+
+Promise composition is a great way to handle situations where asynchronous operations depend on each other and order matters. Sometimes, though, order does not matter but only that all operations complete, in fact it's ideal that they run in parallel. This running in parallel is called _concurrency_, and in JS it's achieved with the function `Promise.all()`.
+
+`Promise.all()` accepts and *array* of Promises and returns a single promise. The single promise returned will either:
+- If all promises in the array resolve, the function will return a resolve value or;
+- If a single promise from the array fails, the function will return a reject value (Also known as _failing fast_).
+
+```javascript
+let myPromises = Promise.all([returnsPromOne(), returnsPromTwo(), returnsPromThree()]);
+
+myPromises
+  .then((arrayOfValues) => {
+    console.log(arrayOfValues);
+  })
+  .catch((rejectionReason) => {
+    console.log(rejectionReason);
+  });
+```
+
+#### Async Await
+
