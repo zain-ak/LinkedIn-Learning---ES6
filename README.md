@@ -68,7 +68,7 @@ With arrays, you can assign specific variable names to indexes you know you'll u
   var [first,,,, last] = ['first', 'second', 'third', 'fourth', 'fifth']; //the commas will skip over the variables in between
 ```
 
-### Asynchronity
+### Asynchronicity
 
 Asynchronous JavaScript uses the _event-loop_. The delayed code will be added to a piece of code waiting to be run. The code waiting to be run will be executed first, then the delayed code will be executed. 
 
@@ -197,3 +197,132 @@ myPromises
 
 #### Async Await
 
+JavaScript is _non-blocking_: instead of stopping the execution of code while it waits, JavaScript uses an *event-loop* which allows it to efficiently execute other tasks while it awaits the completion of these asynchronous actions.
+
+Originally, JavaScript used callback functions to handle asynchronous actions. The problem with callbacks is that they encourage complexly nested code which quickly becomes difficult to read, debug, and scale.
+
+ES6 introduced promises which allows for increased readability. ES8 introduced `async...await` which further improves readability by reading more like traditional, synchronous code. 
+
+`async...await` introduces a new syntax for using promises and generators, it doesn't introduce any new functionality in JS that wasn't there before. 
+
+##### async operator
+The `async` keyword is used to write functions that'll handle asycnhronous operations. 
+
+```javascript
+//async declaration
+async function myFunc() {
+  // Function body here
+};
+
+myFunc();
+
+//async expression
+const myFunc = async () => {
+  // Function body here
+};
+
+myFunc();
+```
+
+`async` functions always return a promise. This means that all the syntax for promises like `.then()` and `.catch()` applies. There are three possible return values:
+- If there’s nothing returned from the function, it will return a promise with a resolved value of undefined;
+- If there’s a non-promise value returned from the function, it will return a promise resolved to that value;
+- If a promise is returned from the function, it will simply return that promise.
+
+##### await operator
+The `await` keyword can only be used _inside_ an async function. await is an *operator*: it returns the resolved value of a promise. Since promises resolve in an indeterminate amount of time, await *halts* the execution of our async function until a given promise is resolved.
+
+Promises are usually returned from functions in libraries. We can await the resolution of a promise insde an async function. 
+
+```javascript
+async function asyncFuncExample(){
+  let resolvedValue = await myPromise();
+  console.log(resolvedValue);
+}
+
+asyncFuncExample(); // Prints: I am resolved now!
+```
+
+##### Dependent Promises
+Similar to chaining promises, async-await becomes really useful when multiple operations that are dependent on each other are implemented with it. Async-await allows for less cluttered code that is easier to maintain. The bigger point is that the code looks similar to traditional synchronous code which allows for the former. 
+
+Variables are also more easily assigned with async-await. Here's an example and comparison:
+```javascript
+//chained promises
+function nativePromiseVersion() {
+    returnsFirstPromise()
+    .then((firstValue) => {
+        console.log(firstValue);
+        return returnsSecondPromise(firstValue);
+    })
+   .then((secondValue) => {
+        console.log(secondValue);
+    });
+}
+
+//async-await dependent
+sync function asyncAwaitVersion() {
+ let firstValue = await returnsFirstPromise();
+ console.log(firstValue);
+ let secondValue = await returnsSecondPromise(firstValue);
+ console.log(secondValue);
+}
+```
+
+##### Handling Errors
+When `.catch()` is used with a long promise chain, there is no indication of where in the chain the error was thrown.
+
+With `async...await`, we use `try...catch` statements for error handling. By using this syntax, not only are we able to handle errors in the same way we do with synchronous code, but we can also catch both synchronous and asynchronous errors.
+
+Here's a simple example below:
+```javascript
+const hostDinnerParty = async () => {
+  try {
+    let result = await cookBeanSouffle();
+    console.log(`${result} is served!`);
+  }
+  catch (error) {
+    console.log(error);
+    console.log(`Ordering a pizza!`);
+  }
+}
+```
+
+###### Independent Promises
+```javascript
+async function waiting() {
+ const firstValue = await firstAsyncThing();
+ const secondValue = await secondAsyncThing();
+ console.log(firstValue, secondValue);
+}
+
+async function concurrent() {
+ const firstPromise = firstAsyncThing();
+ const secondPromise = secondAsyncThing();
+console.log(await firstPromise, await secondPromise);
+}
+```
+While `async...await` allows for synchronous style coding, it can slow down an async function if the promises within are independent of each other. This is evident in the `waiting()` function in the above code; `firstValue` will wait to be assigned its value and only then will the function move on to `secondValue`. 
+
+However, in the function `concurrent()`, both promises within the function are assigned values asynchronously, meaning they are probably running simultaneously. The `concurrent()` function itself comes and pauses at the `console.log()` line, where it `awaits` the variables `firstPromise` and `secondPromise` to have values.
+
+```javascript
+//Another example with template literal
+const serveDinner = async () => {
+  let vegetablePromise = steamBroccoli();
+  let starchPromise = cookRice();
+  let proteinPromise = bakeChicken();
+  let sidePromise = cookBeans();
+  
+  console.log(`Dinner is served. We're having ${await vegetablePromise}, ${await starchPromise}, ${await proteinPromise}, and ${await sidePromise}.`);
+}
+
+serveDinner();
+```
+
+*NOTE:* If we have multiple truly independent promises that we would like to execute fully in parallel, we must use individual .then() functions and avoid halting our execution with await.
+
+##### Await Promise.all()
+Another way to take advantage of concurrency when we have multiple promises which can be executed simultaneously is to `await` a `Promise.all()`.
+
+`Promise.all()` allows us to take advantage of asynchronicity— each of the asynchronous task can process concurrently. There is also the benefit of _failing fast_, meaning it won’t wait for the rest of the asynchronous actions to complete once any one has *rejected*.
